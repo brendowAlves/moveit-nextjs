@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ChallengeContext } from "../contexts/ChallengeContext";
 import styles from "../styles/components/ContDown.module.css";
 
 let countdownTimeout: NodeJS.Timeout;
 const initialTimer = 0.1 * 60;
 
 export function ContDown() {
+  const { startNewChallenge } = useContext(ChallengeContext);
+
   const [time, setTime] = useState(initialTimer);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -30,6 +33,7 @@ export function ContDown() {
     } else if (isActive && time == 0) {
       setHasFinished(true);
       setIsActive(true);
+      startNewChallenge();
     }
   }, [isActive, time]);
 
