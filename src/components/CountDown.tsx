@@ -1,41 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { ChallengeContext } from "../contexts/ChallengeContext";
+import { CountdownContext } from "../contexts/CountdownContext";
 import styles from "../styles/components/ContDown.module.css";
 
-let countdownTimeout: NodeJS.Timeout;
-const initialTimer = 0.1 * 60;
-
 export function ContDown() {
-  const { startNewChallenge } = useContext(ChallengeContext);
-
-  const [time, setTime] = useState(initialTimer);
-  const [isActive, setIsActive] = useState(false);
-  const [hasFinished, setHasFinished] = useState(false);
-
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-
-  function startCountDown() {
-    setIsActive(true);
-  }
-
-  function resetCountDowns() {
-    clearTimeout(countdownTimeout);
-    setIsActive(false);
-    setTime(initialTimer);
-  }
-
-  useEffect(() => {
-    if (isActive && time > 0) {
-      countdownTimeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
-    } else if (isActive && time == 0) {
-      setHasFinished(true);
-      setIsActive(true);
-      startNewChallenge();
-    }
-  }, [isActive, time]);
+  const {
+    minutes,
+    seconds,
+    hasFinished,
+    isActive,
+    startCountDown,
+    resetCountDown,
+  } = useContext(CountdownContext);
 
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, "0").split("");
   const [secondsLeft, secondsRight] = String(seconds)
@@ -66,7 +42,7 @@ export function ContDown() {
             <button
               type="button"
               className={`${styles.countdownButton} ${styles.countdownButtonActive}`}
-              onClick={resetCountDowns}
+              onClick={resetCountDown}
             >
               Abondonar ciclo
             </button>
